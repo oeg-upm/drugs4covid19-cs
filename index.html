@@ -13,7 +13,7 @@
         <button class="btn btn-primary">Submit</button>
       </center>
     </div>
-    <span class="popup-tag"><button id="drugs" class="btn btn-drugs">Drug</button><button id="sympton" class="btn btn-sympton">Sympton</button><button id="disease" class="btn btn-disease">Disease</button></span>
+    <span class="popup-tag"><button id="drugs" class="btn btn-drugs concepts">Drug</button><button id="sympton" class="btn btn-sympton concepts">Sympton</button><button id="disease" class="btn btn-disease concepts">Disease</button></span>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script>
@@ -46,7 +46,7 @@
       	}
       	return false;
       }
-
+/*
       $("#drugs").on("click", function(){
         console.log("drugs");
         console.log(document.getSelection());
@@ -102,17 +102,83 @@
         $("#sentence").html(html);
         $("span.popup-tag").css("display","none");
       });
+*/
+      $(".concepts").on("click", function(){
 
-/*
+        if ($(this).attr('id')=="drugs"){
+          selector="drugs_selected"
+        } else if ($(this).attr('id')=="disease"){
+          selector="disease_selected";
+        } else if ($(this).attr('id')=="sympton"){
+          selector="sympton_selected";
+        }
+
+        console.log("drugs");
+        console.log(document.getSelection());
+        var sel = document.getSelection();
+        console.log("Pre Selected text:"+sel.anchorOffset+" "+sel.extentOffset);
+        console.log("Node:"+sel.anchorNode.nodeValue);
+        var sentence_text = $("#sentence").text();
+        var sentence_html = $("#sentence").html();
+        var start_index = sentence_text.indexOf(sel.anchorNode.nodeValue);
+        console.log("Start node:"+start_index);
+        var off = sel.anchorOffset+start_index;
+        var ext = sel.extentOffset+start_index;
+
+        if (off>ext){
+          aux = ext;
+          ext = off;
+          off=aux;
+        }
+
+        console.log("Selected text:"+off+" "+ext);
+
+        console.log("Text:"+sentence_text);
+        console.log("HTML:"+sentence_html);
+        console.log(sel.getRangeAt(0));
+        minus_detected = false;
+        waiting_max = false;
+        var html="";
+        var text_index=0;
+
+        for (var i=0;i<sentence_html.length;i++){
+          character = sentence_html[i];
+          //console.log("Character:"+character+" "+i+" "+text_index);
+          if (character=='<'){
+            console.log("Apertura:"+i+" "+text_index);
+            minus_detected = true;
+          } else if(character=='>'){
+            console.log("Cierre:"+i+" "+text_index);
+            minus_detected = false;
+            text_index--;
+          }
+          if (text_index==off){
+            html=html+'<span id="test" class="'+selector+'">';
+          } else if (text_index==ext){
+            html=html+'</span>';
+          }
+          if (!minus_detected){
+            text_index++;
+          }
+          html=html+sentence_html[i];
+        }
+        //html = sentence_text.slice(0,off)+'<span class="drugs_selected">'+sentence_text.slice(off,ext)+'</span>'+sentence_text.slice(ext);
+        console.log("FINAL HTML:"+html);
+        $("#sentence").html(html);
+        $("span.popup-tag").css("display","none");
+      });
+
+console.log("PASS1");
       var solr_url="https://librairy.linkeddata.es/data/covid-sentences/select?q=*%3A*&rows=1";
       var start = Math.floor(Math.random()*10);
       solr_url = solr_url + "&start="+start;
       //librairy = "http://librairy.linkeddata.es/solr/covid/select?q=*%3A*"
 
+      console.log("PASS");
       $.getJSON(solr_url,function(data){
         $("#sentence").text(data.response.docs[0].text_t);
       });
-      */
+
 
     </script>
   </body>
