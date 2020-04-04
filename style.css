@@ -54,3 +54,11 @@
   background-color:#0021ff;
   color:white;
 }
+.sympton_selected{
+  background-color:#800600;
+  color:white;
+}
+.disease_selected{
+  background-color:#008000;
+  color:white;
+}
