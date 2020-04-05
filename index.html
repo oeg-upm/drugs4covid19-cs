@@ -12,27 +12,33 @@
 
         </div>
         <div class="col-6">
-
+          <center>
+            <h1 style="margin-bottom:20px">Seleccione palabras y elija su concepto correspondiente</h1>
+            <div >
+              <span class="drugs_selected tag" style="margin-right:10px">Drug</span><span class="sympton_selected tag" style="margin-right:10px">Sympton</span><span class="disease_selected tag">Disease</span>
+            </div>
+          </center>
         </div>
         <div class="col">
         </div>
       </div>
-      <div class="row" style="height:33%">
+      <div class="row" style="height:20%">
         <div class="col">
 
         </div>
         <div class="col-6">
-          <center><h1 style="margin-bottom:20px">Seleccione palabras y elija su concepto correspondiente</h1></center>
+          <center>
+
+          </center>
+
           <div id="sentence_text" style="margin-bottom:20px">
             <p id="sentence" class="center">We will discuss the potential roles of sPLA 2 s in atherosclerosis again in subsequent sections.</p>
           </div>
-          <div style="margin-bottom:20px">
-            <span class="drugs_selected tag" style="margin-right:10px">Drugs</span><span class="sympton_selected tag" style="margin-right:10px">Sympton</span><span class="disease_selected tag">Disease</span>
-          </div>
           <div>
               <center>
-                <button class="btn btn-primary">Enviar</button>
-                <button class="btn btn-primary">Asistente IA</button>
+                <button id="new" class="btn btn-primary">New</button>
+                <button id="submit" class="btn btn-primary">Enviar</button>
+                <button id="assistant" class="btn btn-primary">Asistente IA</button>
               </center>
           </div>
           <span class="popup-tag"><button id="drugs" class="btn btn-drugs concepts">Drug</button><button id="sympton" class="btn btn-sympton concepts">Sympton</button><button id="disease" class="btn btn-disease concepts">Disease</button></span>
@@ -48,7 +54,7 @@
 
       //var popover_content='<button id="drugs" class="btn btn-drugs">Drug</button><button id="" class="btn btn-sympton">Sympton</button><button class="btn btn-disease">Disease</button>';
 
-      console.log("PASO");
+      var last_html = "";
 
       $(document).ready(function() {
       	$('#sentence').mouseup(function(event) {
@@ -74,63 +80,25 @@
       	}
       	return false;
       }
-/*
-      $("#drugs").on("click", function(){
-        console.log("drugs");
-        console.log(document.getSelection());
-        var sel = document.getSelection();
-        console.log("Pre Selected text:"+sel.anchorOffset+" "+sel.extentOffset);
-        console.log("Node:"+sel.anchorNode.nodeValue);
-        var sentence_text = $("#sentence").text();
-        var sentence_html = $("#sentence").html();
-        var start_index = sentence_text.indexOf(sel.anchorNode.nodeValue);
-        console.log("Start node:"+start_index);
-        var off = sel.anchorOffset+start_index;
-        var ext = sel.extentOffset+start_index;
 
-        if (off>ext){
-          aux = ext;
-          ext = off;
-          off=aux;
-        }
-
-        console.log("Selected text:"+off+" "+ext);
-
-        console.log("Text:"+sentence_text);
-        console.log("HTML:"+sentence_html);
-        console.log(sel.getRangeAt(0));
-        minus_detected = false;
-        waiting_max = false;
-        var html="";
-        var text_index=0;
-
-        for (var i=0;i<sentence_html.length;i++){
-          character = sentence_html[i];
-          //console.log("Character:"+character+" "+i+" "+text_index);
-          if (character=='<'){
-            console.log("Apertura:"+i+" "+text_index);
-            minus_detected = true;
-          } else if(character=='>'){
-            console.log("Cierre:"+i+" "+text_index);
-            minus_detected = false;
-            text_index--;
-          }
-          if (text_index==off){
-            html=html+'<span id="test" class="drugs_selected">';
-          } else if (text_index==ext){
-            html=html+'</span>';
-          }
-          if (!minus_detected){
-            text_index++;
-          }
-          html=html+sentence_html[i];
-        }
-        //html = sentence_text.slice(0,off)+'<span class="drugs_selected">'+sentence_text.slice(off,ext)+'</span>'+sentence_text.slice(ext);
-        console.log("FINAL HTML:"+html);
-        $("#sentence").html(html);
-        $("span.popup-tag").css("display","none");
+      $("#assistant").on("click",function(){
+        last_html = $("#sentence").html();
+        console.log(last_html);
       });
-*/
+
+      $("#new").on("click", function(){
+        start_parameter = Math.floor(Math.random()*10);
+        solr_new_url = solr_url + "&start="+start_parameter;
+
+        $.getJSON(solr_new_url,function(data){
+          $("#sentence").text(data.response.docs[0].text_t);
+        });
+      });
+
+      $("#submit").on("click", function(){
+        alert("Not implemented yet");
+      });
+
       $(".concepts").on("click", function(){
 
         if ($(this).attr('id')=="drugs"){
@@ -196,14 +164,11 @@
         $("span.popup-tag").css("display","none");
       });
 
-console.log("PASS1");
       var solr_url="https://librairy.linkeddata.es/data/covid-sentences/select?q=*%3A*&rows=1";
       var start = Math.floor(Math.random()*10);
-      solr_url = solr_url + "&start="+start;
-      //librairy = "http://librairy.linkeddata.es/solr/covid/select?q=*%3A*"
 
-      console.log("PASS");
-      $.getJSON(solr_url,function(data){
+
+      $.getJSON(solr_url + "&start="+start,function(data){
         $("#sentence").text(data.response.docs[0].text_t);
       });
 
