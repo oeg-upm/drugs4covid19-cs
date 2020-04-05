@@ -37,14 +37,33 @@
           <div>
               <center>
                 <button id="new" class="btn btn-primary">New</button>
-                <button id="submit" class="btn btn-primary">Enviar</button>
-                <button id="assistant" class="btn btn-primary">Asistente IA</button>
+                <button id="submit" class="btn btn-primary" >Enviar</button>
+                <button id="assistant" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Asistente IA</button>
               </center>
           </div>
           <span class="popup-tag"><button id="drugs" class="btn btn-drugs concepts">Drug</button><button id="sympton" class="btn btn-sympton concepts">Sympton</button><button id="disease" class="btn btn-disease concepts">Disease</button></span>
         </div>
         <div class="col">
 
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Sugerencias</h5>
+            <button type="button" class="close btn btn-primary" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div id="modal_text" class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>
@@ -81,11 +100,13 @@
       	return false;
       }
 
+      /*
       $("#assistant").on("click",function(){
         last_html = $("#sentence").html();
+        alert("Not implemented yet");
         console.log(last_html);
       });
-
+*/
       $("#new").on("click", function(){
         start_parameter = Math.floor(Math.random()*10);
         solr_new_url = solr_url + "&start="+start_parameter;
@@ -166,10 +187,25 @@
 
       var solr_url="https://librairy.linkeddata.es/data/covid-sentences/select?q=*%3A*&rows=1";
       var start = Math.floor(Math.random()*10);
+      var user_observation = {};
 
 
       $.getJSON(solr_url + "&start="+start,function(data){
         $("#sentence").text(data.response.docs[0].text_t);
+        var doc = data.response.docs[0];
+        var html_modal = "";
+
+        if ("bionlp_atc3_t" in doc){
+          html_modal=html_modal+"<p>bionlp_atc3_t:"+doc.bionlp_atc3_t+"</p>"
+        }
+
+        if ("bionlp_atc4_t" in doc){
+          html_modal=html_modal+"<p>bionlp_atc4_t:"+doc.bionlp_atc4_t+"</p>"
+        }
+        $("#modal_text").html(html_modal);
+        console.log(html_modal);
+
+
       });
 
 
