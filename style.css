@@ -23,7 +23,6 @@ body {
 
 .container {
   margin:auto;
-  height:100%;
 }
 
 .center {
@@ -114,4 +113,11 @@ img {
 .coldisc span {
 font-size: 1.7rem;
 font-weight: 700;
+}
+.row {
+  padding-top: 2rem;
+}
+
+.sep {
+  padding-top: 4rem;
 }
