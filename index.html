@@ -6,14 +6,42 @@
 
   <body>
     <!-- Button trigger modal -->
-    <br><br><br><br><br><br>
-    <div id="sentence_text">
-      <center>
-        <p id="sentence">We will discuss the potential roles of sPLA 2 s in atherosclerosis again in subsequent sections.</p>
-        <button class="btn btn-primary">Submit</button>
-      </center>
+    <div class="container">
+      <div class="row" style="height:33%" align-items-center>
+        <div class="col">
+
+        </div>
+        <div class="col-6">
+
+        </div>
+        <div class="col">
+        </div>
+      </div>
+      <div class="row" style="height:33%">
+        <div class="col">
+
+        </div>
+        <div class="col-6">
+          <center><h1 style="margin-bottom:20px">Seleccione palabras y elija su concepto correspondiente</h1></center>
+          <div id="sentence_text" style="margin-bottom:20px">
+            <p id="sentence" class="center">We will discuss the potential roles of sPLA 2 s in atherosclerosis again in subsequent sections.</p>
+          </div>
+          <div style="margin-bottom:20px">
+            <span class="drugs_selected tag" style="margin-right:10px">Drugs</span><span class="sympton_selected tag" style="margin-right:10px">Sympton</span><span class="disease_selected tag">Disease</span>
+          </div>
+          <div>
+              <center>
+                <button class="btn btn-primary">Enviar</button>
+                <button class="btn btn-primary">Asistente IA</button>
+              </center>
+          </div>
+          <span class="popup-tag"><button id="drugs" class="btn btn-drugs concepts">Drug</button><button id="sympton" class="btn btn-sympton concepts">Sympton</button><button id="disease" class="btn btn-disease concepts">Disease</button></span>
+        </div>
+        <div class="col">
+
+        </div>
+      </div>
     </div>
-    <span class="popup-tag"><button id="drugs" class="btn btn-drugs concepts">Drug</button><button id="sympton" class="btn btn-sympton concepts">Sympton</button><button id="disease" class="btn btn-disease concepts">Disease</button></span>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script>
