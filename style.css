@@ -1,13 +1,20 @@
+body {
+  font-family: 'Roboto';
+  font-size: 1.5rem;
+}
+
 .popup-tag{
   position:absolute;
   display:none;
-  background-color:#d8dad8;
+  background-color:white;
   color:white;
   padding:10px;
   font-size:20px;
   font-weight:bold;
   text-decoration:underline;
   cursor:pointer;
+  border: 1px solid #0A7AA2;
+  border-radius: 3px;
 }
 
 .tag{
@@ -22,9 +29,10 @@
 .center {
   margin: auto auto 10px auto;
   width: 100%;
-  border: 3px solid black;
+  border: 3px solid #0A7AA2;
   padding: 10px;
   margin-top: 1.5rem;
+  border-radius: 4px;
 }
 
 .btn-drugs{
@@ -61,16 +69,49 @@ color: #800600;
 .drugs_selected{
   background-color:#0021ff;
   color:white;
+  border-radius: 4px;
 }
 .sympton_selected{
   background-color:#800600;
   color:white;
+  border-radius: 4px;
 }
 .disease_selected{
   background-color:#008000;
   color:white;
+  border-radius: 4px;
 }
 
 .knowmore {
   padding-bottom: 2rem;
+}
+.todo span {
+  font-size: 1.7rem;
+font-weight: 700;
+}
+
+
+
+
+h1 {
+  color: #0A7AA2;
+}
+
+.d4c {
+  padding-top: 2rem;
+  color: #0A7AA2;
+  display: inline-block;
+}
+
+img {
+    display: inline-block;
+}
+
+.coldisc{
+  padding-top: 4rem;
+}
+
+.coldisc span {
+font-size: 1.7rem;
+font-weight: 700;
 }
