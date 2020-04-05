@@ -16,7 +16,7 @@
         <div class="col-6">
           <center>
             <h1 style="margin-bottom:20px">Select words and choose their category</h1>
-            <p class="todo">Please, help us validate our work against COVID-19. </p> 
+            <p class="todo">Please, help us validate our work against COVID-19. </p>
 
            <p class="todo"><span>What to do?</span> Very simple: select those words that represent a drug, a symptom or a disease by double-clicking on them. Choose their corresponding category from the pop up message. After that, click on "Send". If you want to review a new sentence, click on "New". If you have any doubts, click on "Tutorial". <span>Your help is much appreciated! </span></p>
             <p class="knowmore">To know more about this work, visit our <a href="">website</a>.</p>
@@ -50,12 +50,11 @@
 
             </div>
           </div>
-
           <div>
               <center>
                 <button id="new" class="btn btn-primary">New</button>
                 <button id="submit" class="btn btn-primary" >Send</button>
-                <button id="tutorial" class="btn btn-primary" data-toggle="modal" data-target="#videoModal" data-theVideo="http://www.youtube.com/embed/loFtozxZG0s">Tutorial</button>
+                <button id="tutorial" class="btn btn-primary" data-toggle="modal" data-target="#videoModal" data-theVideo="https://www.youtube.com/embed/yblZ2N3euco">Tutorial</button>
               </center>
           </div>
           <span class="popup-tag"><button id="drugs" class="btn btn-drugs concepts">Drug</button><button id="sympton" class="btn btn-sympton concepts">Symptom</button><button id="disease" class="btn btn-disease concepts">Disease</button></span>
@@ -114,6 +113,10 @@
       //var popover_content='<button id="drugs" class="btn btn-drugs">Drug</button><button id="" class="btn btn-sympton">Sympton</button><button class="btn btn-disease">Disease</button>';
 
       var last_html = "";
+
+      if (navigator.userAgent.indexOf("Chrome")<0){
+        alert("Browser not supported. Try with Chrome.");
+      }
 
       $(document).ready(function() {
       	$('#sentence').mouseup(function(event) {
@@ -284,7 +287,7 @@
         return html_terms;
       }
 
-      $.getJSON(solr_url + "&start="+start,function(data){
+      $.getJSON(solr_url+"&start="+start,function(data){
         $("#sentence").text(data.response.docs[0].text_t);
         var doc = data.response.docs[0];
 
