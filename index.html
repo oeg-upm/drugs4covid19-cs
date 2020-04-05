@@ -153,6 +153,18 @@
 
         $.getJSON(solr_new_url,function(data){
           $("#sentence").text(data.response.docs[0].text_t);
+          var doc = data.response.docs[0];
+          var html_modal = "";
+
+          if ("bionlp_atc3_t" in doc){
+              html_modal=html_modal+'<p>bionlp_atc3_t:<a target="_blank" href="https://www.drugbank.ca/atc?utf8=%E2%9C%93&query='+doc.bionlp_atc3_t+'">'+doc.bionlp_atc3_t+'</a></p>'
+          }
+
+          if ("bionlp_atc4_t" in doc){
+            html_modal=html_modal+'<p>bionlp_atc4_t:<a target="_blank" href="https://www.drugbank.ca/atc?utf8=%E2%9C%93&query='+doc.bionlp_atc4_t+'">'+doc.bionlp_atc4_t+'</a></p>'
+          }
+          $("#modal_text").html(html_modal);
+          console.log(html_modal);
         });
       });
 
@@ -236,11 +248,11 @@
         var html_modal = "";
 
         if ("bionlp_atc3_t" in doc){
-          html_modal=html_modal+"<p>bionlp_atc3_t:"+doc.bionlp_atc3_t+"</p>"
+            html_modal=html_modal+'<p>bionlp_atc3_t:<a href="https://www.drugbank.ca/atc?utf8=%E2%9C%93&query='+doc.bionlp_atc3_t+'">'+doc.bionlp_atc3_t+'</a></p>'
         }
 
         if ("bionlp_atc4_t" in doc){
-          html_modal=html_modal+"<p>bionlp_atc4_t:"+doc.bionlp_atc4_t+"</p>"
+          html_modal=html_modal+'<p>bionlp_atc4_t:<a href="https://www.drugbank.ca/atc?utf8=%E2%9C%93&query='+doc.bionlp_atc4_t+'">'+doc.bionlp_atc4_t+'</a></p>'
         }
         $("#modal_text").html(html_modal);
         console.log(html_modal);
