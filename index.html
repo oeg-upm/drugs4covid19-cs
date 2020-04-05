@@ -67,6 +67,32 @@
         </div>
       </div>
     </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Usuario:</label>
+                <input type="text" class="form-control" id="recipient-name">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" id="accept_modal" class="btn btn-primary">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script>
@@ -87,7 +113,16 @@
                 $("span.popup-tag").css("display","none");
               }
       	});
+
+        if (localStorage.getItem('user-cs')===null){
+          $("#exampleModal").modal({
+            show:'true'
+          });
+        }
+
       });
+
+
 
       function getSelected() {
       	if(window.getSelection) { return window.getSelection(); }
@@ -107,6 +142,11 @@
         console.log(last_html);
       });
 */
+      $("#accept_modal").on("click", function(){
+          localStorage.setItem("user-cs",$("#recipient-name").val());
+          $("#exampleModal").modal('toggle');
+      });
+
       $("#new").on("click", function(){
         start_parameter = Math.floor(Math.random()*10);
         solr_new_url = solr_url + "&start="+start_parameter;
