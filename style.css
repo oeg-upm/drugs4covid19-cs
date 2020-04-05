@@ -8,7 +8,6 @@
   font-weight:bold;
   text-decoration:underline;
   cursor:pointer;
-  -webkit-filter: drop-shadow(0 1px 10px rgba(113,158,206,0.8));
 }
 
 .tag{
@@ -33,9 +32,8 @@
   background-color:#0021ff;
 }
 .btn-drugs:hover{
-  -webkit-box-shadow: 5px 5px 5px 5px #000000;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow:    5px 5px 5px 5px #000000;  /* Firefox 3.5 - 3.6 */
-  box-shadow:         0px 0px 10px 10px #000000;
+background-color: white;
+color: #0021ff;
 }
 
 .btn-disease{
@@ -45,9 +43,8 @@
 }
 
 .btn-disease:hover{
-  -webkit-box-shadow: 5px 5px 5px 5px #000000;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow:    5px 5px 5px 5px #000000;  /* Firefox 3.5 - 3.6 */
-  box-shadow:         0px 0px 10px 10px #000000;
+  background-color: white;
+color:#008000;
 }
 
 .btn-sympton{
@@ -57,9 +54,8 @@
 }
 
 .btn-sympton:hover{
-  -webkit-box-shadow: 5px 5px 5px 5px #000000;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow:    5px 5px 5px 5px #000000;  /* Firefox 3.5 - 3.6 */
-  box-shadow:         0px 0px 10px 10px #000000;
+background-color: white;
+color: #800600;
 }
 .drugs_selected{
   background-color:#0021ff;
@@ -72,4 +68,8 @@
 .disease_selected{
   background-color:#008000;
   color:white;
+}
+
+.knowmore {
+  padding-bottom: 2rem;
 }
