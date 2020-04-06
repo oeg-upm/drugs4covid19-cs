@@ -121,14 +121,24 @@
       $(document).ready(function() {
       	$('#sentence').mouseup(function(event) {
       		var selection = getSelected();
-              selection = $.trim(selection);
-              if(selection != ''){
-                $("span.popup-tag").css("display","block");
-                $("span.popup-tag").css("top",event.clientY);
-                $("span.popup-tag").css("left",event.clientX);
-              }else{
-                $("span.popup-tag").css("display","none");
-              }
+          selection = $.trim(selection);
+
+          //console.log("Selection indexes:"+sel);
+          //console.log("HTML text:"+$("#sentence").html());
+
+          var sel = document.getSelection();
+          var sentence_text = $("#sentence").text();
+
+          //Collision detected
+          if (sentence_text.indexOf(sel.anchorNode.nodeValue)!=sentence_text.indexOf(sel.focusNode.nodeValue)){
+            $("span.popup-tag").css("display","none");
+            alert('Part of the selection is used by a tagged word.');
+          } else {
+            $("span.popup-tag").css("display","block");
+            $("span.popup-tag").css("top",event.clientY);
+            $("span.popup-tag").css("left",event.clientX);
+          }
+
       	});
 
         if (localStorage.getItem('user-cs')===null){
@@ -216,15 +226,15 @@
           selector="sympton_selected";
         }
 
-        console.log("drugs");
-        console.log(document.getSelection());
+        //console.log("drugs");
+        //console.log(document.getSelection());
         var sel = document.getSelection();
-        console.log("Pre Selected text:"+sel.anchorOffset+" "+sel.extentOffset);
-        console.log("Node:"+sel.anchorNode.nodeValue);
+        //console.log("Pre Selected text:"+sel.anchorOffset+" "+sel.extentOffset);
+        //console.log("Node:"+sel.anchorNode.nodeValue);
         var sentence_text = $("#sentence").text();
         var sentence_html = $("#sentence").html();
         var start_index = sentence_text.indexOf(sel.anchorNode.nodeValue);
-        console.log("Start node:"+start_index);
+        //console.log("Start node:"+start_index);
         var off = sel.anchorOffset+start_index;
         var ext = sel.extentOffset+start_index;
 
@@ -234,11 +244,11 @@
           off=aux;
         }
 
-        console.log("Selected text:"+off+" "+ext);
+        //console.log("Selected text:"+off+" "+ext);
 
-        console.log("Text:"+sentence_text);
-        console.log("HTML:"+sentence_html);
-        console.log(sel.getRangeAt(0));
+        //console.log("Text:"+sentence_text);
+        //console.log("HTML:"+sentence_html);
+        //console.log(sel.getRangeAt(0));
         minus_detected = false;
         waiting_max = false;
         var html="";
@@ -248,10 +258,10 @@
           character = sentence_html[i];
           //console.log("Character:"+character+" "+i+" "+text_index);
           if (character=='<'){
-            console.log("Apertura:"+i+" "+text_index);
+            //console.log("Apertura:"+i+" "+text_index);
             minus_detected = true;
           } else if(character=='>'){
-            console.log("Cierre:"+i+" "+text_index);
+            //console.log("Cierre:"+i+" "+text_index);
             minus_detected = false;
             text_index--;
           }
@@ -266,7 +276,7 @@
           html=html+sentence_html[i];
         }
         //html = sentence_text.slice(0,off)+'<span class="drugs_selected">'+sentence_text.slice(off,ext)+'</span>'+sentence_text.slice(ext);
-        console.log("FINAL HTML:"+html);
+        //console.log("FINAL HTML:"+html);
         $("#sentence").html(html);
         $("span.popup-tag").css("display","none");
       });
