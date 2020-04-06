@@ -113,6 +113,11 @@
       //var popover_content='<button id="drugs" class="btn btn-drugs">Drug</button><button id="" class="btn btn-sympton">Sympton</button><button class="btn btn-disease">Disease</button>';
 
       var last_html = "";
+      var json_object = {"sentence_id":"",
+                         "user_id":"",
+                         "drugs":[],
+                         "diseases":[],
+                         "symptoms":[]};
 
       if (navigator.userAgent.indexOf("Chrome")<0){
         alert("Browser not supported. Try with Chrome.");
@@ -145,6 +150,8 @@
           $("#exampleModal").modal({
             show:'true'
           });
+        } else {
+          json_object["user_id"]=localStorage.getItem('user-cs');
         }
         autoPlayYouTubeModal();
 
@@ -184,17 +191,24 @@
 
       $("#accept_modal").on("click", function(){
           localStorage.setItem("user-cs",$("#recipient-name").val());
+          json_object["user-cs"]=$("#recipient-name").val();
           $("#exampleModal").modal('toggle');
       });
 
       $("#new").on("click", function(){
-        start_parameter = Math.floor(Math.random()*10);
+        start_parameter = Math.floor(Math.random()*100000);
         solr_new_url = solr_url + "&start="+start_parameter;
         $("#suggestions").empty();
+
+        json_object["sentence_id"]="";
+        json_object["drugs"]=[];
+        json_object["symptoms"]=[];
+        json_object["diseases"]=[];
 
         $.getJSON(solr_new_url,function(data){
           $("#sentence").text(data.response.docs[0].text_t);
           var doc = data.response.docs[0];
+          json_object["sentence_id"]=doc.id;
 
           if ("bionlp_atc3_t" in doc){
             $("#suggestions").append(getTermsHTML("Drugs(ATC3)",doc.bionlp_atc3_t));
@@ -213,18 +227,15 @@
       });
 
       $("#submit").on("click", function(){
-        alert("Not implemented yet");
+        alert("Not implemented yet."+JSON.stringify(json_object));
+        $.post("http://52.59.206.115:5000/", JSON.stringify(json_object), function(result){
+
+        });
+        alert("Not implemented yet."+JSON.stringify(json_object));
       });
 
       $(".concepts").on("click", function(){
 
-        if ($(this).attr('id')=="drugs"){
-          selector="drugs_selected"
-        } else if ($(this).attr('id')=="disease"){
-          selector="disease_selected";
-        } else if ($(this).attr('id')=="sympton"){
-          selector="sympton_selected";
-        }
 
         //console.log("drugs");
         //console.log(document.getSelection());
@@ -242,6 +253,25 @@
           aux = ext;
           ext = off;
           off=aux;
+        }
+
+        var selection_text = sel.anchorNode.nodeValue.substring(sel.anchorOffset,sel.extentOffset);
+
+        if ($(this).attr('id')=="drugs"){
+          selector="drugs_selected";
+          aux_json = json_object["drugs"];
+          aux_json.push(selection_text);
+          json_object["drugs"]= aux_json;
+        } else if ($(this).attr('id')=="disease"){
+          selector="disease_selected";
+          aux_json = json_object["diseases"];
+          aux_json.push(selection_text);
+          json_object["diseases"]= aux_json;
+        } else if ($(this).attr('id')=="sympton"){
+          selector="sympton_selected";
+          aux_json = json_object["symptoms"];
+          aux_json.push(selection_text);
+          json_object["symptoms"]= aux_json;
         }
 
         //console.log("Selected text:"+off+" "+ext);
@@ -300,6 +330,7 @@
       $.getJSON(solr_url+"&start="+start,function(data){
         $("#sentence").text(data.response.docs[0].text_t);
         var doc = data.response.docs[0];
+        json_object["sentence_id"]=doc.id;
 
         if ("bionlp_atc3_t" in doc){
           $("#suggestions").append(getTermsHTML("Drugs(ATC3)",doc.bionlp_atc3_t));
