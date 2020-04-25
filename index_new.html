@@ -1,0 +1,299 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <!-- Button trigger modal -->
+    <div class="container">
+      <div class="row" align-items-center>
+        <div class="col">
+
+        </div>
+        <div class="col-6">
+          <center>
+            <h1 style="margin-bottom:20px">Select words by their category</h1>
+            <p class="todo">Please, help us validate our work against COVID-19. </p>
+
+           <p class="todo"><span>What to do?</span> Very simple: select those words that represent a drug, a symptom or a disease by double-clicking on them. Choose their corresponding category from the pop up message. After that, click on "Send". If you want to review a new sentence, click on "New". If you have any doubts, click on "Tutorial". <span>Your help is much appreciated! </span></p>
+            <p class="knowmore">To know more about this work, visit our <a href="">website</a>.</p>
+            <div style="display:inline-flex;width:100%">
+              <div style="width:33%">
+                <span class="drugs_selected tag" style="margin-right:10px">Drug</span>
+                <div id="drugs_container" style="margin-top:10px"></div>
+              </div>
+              <div style="width:33%">
+                <span class="sympton_selected tag" style="margin-right:10px">Symptom</span>
+                <div id="sympton_container" style="margin-top:10px"></div>
+              </div>
+              <div style="width:33%">
+                <span class="disease_selected tag">Disease</span>
+                <div id="diseases_container" style="margin-top:10px"></div>
+              </div>
+            </div>
+          </center>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+      <div class="row sep">
+        <div class="col">
+
+        </div>
+        <div class="col-6">
+
+          <div id="sentence_text" style="margin-bottom:20px">
+            <p id="sentence" class="center">We will discuss the potential roles of sPLA 2 s in atherosclerosis again in subsequent sections.</p>
+          </div>
+          <div id="instructions">Please, select the drugs you see in the text, clicking on them. When you have finished, click in next category button</div>
+          <div id="word_cloud"></div>
+          <p>
+            <a  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+              More information
+            </a>
+          </p>
+          <div class="collapse" id="collapseExample">
+            <div id="suggestions" class="card card-body">
+
+            </div>
+          </div>
+          <div>
+              <center>
+                <button id="new" class="btn btn-primary">New sentence</button>
+                <button id="next" class="btn btn-primary">Next category</button>
+                <button id="submit" class="btn btn-primary" >Send</button>
+                <button id="tutorial" class="btn btn-primary" data-toggle="modal" data-target="#videoModal" data-theVideo="https://www.youtube.com/embed/yblZ2N3euco">Tutorial</button>
+              </center>
+          </div>
+          <span class="popup-tag"><button id="drugs" class="btn btn-drugs concepts">Drug</button><button id="sympton" class="btn btn-sympton concepts">Symptom</button><button id="disease" class="btn btn-disease concepts">Disease</button></span>
+        </div>
+        <div class="coldisc">
+              <p class="d4c">This is a Citizen Science project part of <span><a href="">DRUGS4COVID</a></span>, developed within #VenceAlVirus hackathon in April 2020.</p>
+              <img src="logo_d4c.svg">
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">User:</label>
+                <input type="text" class="form-control" id="recipient-name">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="accept_modal" class="btn btn-primary">Accept</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Tutorial Modal -->
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModal" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-body">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <div>
+                      <iframe width="100%" height="350" src=""></iframe>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script>
+
+      //var popover_content='<button id="drugs" class="btn btn-drugs">Drug</button><button id="" class="btn btn-sympton">Sympton</button><button class="btn btn-disease">Disease</button>';
+
+      var state=0;
+
+      var last_html = "";
+      var json_object = {"sentence_id":"",
+                         "user_id":"",
+                         "drugs":[],
+                         "diseases":[],
+                         "symptoms":[]};
+
+                         /*
+      if (navigator.userAgent.indexOf("Chrome")<0){
+        alert("Browser not supported. The webpage is optimized for Chrome.");
+      }
+      */
+
+      $(document).ready(function() {
+
+        /*
+
+        if (localStorage.getItem('user-cs')===null){
+          $("#exampleModal").modal({
+            show:'true'
+          });
+        } else {
+          json_object["user_id"]=localStorage.getItem('user-cs');
+        }
+        */
+        autoPlayYouTubeModal();
+
+      });
+
+      //FUNCTION TO GET AND AUTO PLAY YOUTUBE VIDEO FROM DATATAG
+      function autoPlayYouTubeModal() {
+          var trigger = $("body").find('[data-toggle="modal"]');
+          trigger.click(function () {
+              var theModal = $(this).data("target"),
+                  videoSRC = $(this).attr("data-theVideo"),
+                  videoSRCauto = videoSRC + "?autoplay=1";
+              $(theModal + ' iframe').attr('src', videoSRCauto);
+              $(theModal + ' button.close').click(function () {
+                  $(theModal + ' iframe').attr('src', videoSRC);
+              });
+          });
+      }
+
+
+      $("#tutorial").on("click",function(){
+        autoPlayYouTubeModal();
+        /*$("#videoModal").modal({
+          show:'true'
+        });*/
+      });
+
+      $("#accept_modal").on("click", function(){
+          localStorage.setItem("user-cs",$("#recipient-name").val());
+          json_object["user-cs"]=$("#recipient-name").val();
+          $("#exampleModal").modal('toggle');
+      });
+
+      $("#new").on("click", function(){
+        start_parameter = Math.floor(Math.random()*100000);
+        solr_new_url = solr_url + "&start="+start_parameter;
+        $("#suggestions").empty();
+
+        json_object["sentence_id"]="";
+        json_object["drugs"]=[];
+        json_object["symptoms"]=[];
+        json_object["diseases"]=[];
+
+        $.getJSON(solr_new_url,function(data){
+          $("#sentence").text(data.response.docs[0].text_t);
+          var doc = data.response.docs[0];
+          json_object["sentence_id"]=doc.id;
+
+          if ("bionlp_atc3_t" in doc){
+            $("#suggestions").append(getTermsHTML("Drugs(ATC3)",doc.bionlp_atc3_t));
+          }
+
+          if ("bionlp_atc4_t" in doc){
+            $("#suggestions").append(getTermsHTML("Drugs(ATC4)",doc.bionlp_atc4_t));
+          }
+
+          if ("scispcay_diseases_t" in doc){
+            $("#suggestions").append('<p>Diseases:'+doc.scispcay_diseases_t+'</p>');
+          }
+
+
+        });
+      });
+
+      $("#next").on("click", function(){
+        state=state+1;
+
+        if (state==1){
+          $("#instructions").text("Please, select the symptons you see in the text, clicking on them. When you have finished, click in next category button");
+        } else if (state==2){
+          $("#instructions").text("Please, select the disease you see in the text, clicking on them. When you have finished, click in next category button")
+        }
+
+      });
+
+      $("#submit").on("click", function(){
+        console.log("Not implemented yet."+JSON.stringify(json_object));
+        $.post("https://52.59.206.115:5000/", JSON.stringify(json_object), function(result){
+
+        });
+        $.get("https://52.59.206.115:5000/", function(result){
+
+        });
+      });
+
+      $("body").on("click", ".btn-word", function(){
+        console.log("word");
+        if (state==0){
+          $(this).appendTo("#drugs_container");
+        } else if (state==1){
+          $(this).appendTo("#sympton_container");
+        } else if (state==2){
+          $(this).appendTo("#disease_container");
+        }
+
+      });
+
+      var solr_url="https://librairy.linkeddata.es/data/covid-sentences/select?q=*%3A*&rows=1";
+      var start = Math.floor(Math.random()*10);
+      var user_observation = {};
+
+      function getTermsHTML(category,line){
+        words = line.split(" ");
+        html_terms = '<p>'+category+':';
+
+        for (var i=0;i<words.length;i++){
+          html_terms=html_terms+'<a target="_blank" href="https://www.drugbank.ca/atc?utf8=%E2%9C%93&query='+words[i]+'">'+words[i]+'</a> ';
+        }
+        html_terms=html_terms+'</p>'
+
+        return html_terms;
+      }
+
+      $.getJSON(solr_url+"&start="+start,function(data){
+        $("#sentence").text(data.response.docs[0].text_t);
+        var doc = data.response.docs[0];
+        json_object["sentence_id"]=doc.id;
+
+        if ("bionlp_atc3_t" in doc){
+          $("#suggestions").append(getTermsHTML("Drugs(ATC3)",doc.bionlp_atc3_t));
+        }
+
+        if ("bionlp_atc4_t" in doc){
+          $("#suggestions").append(getTermsHTML("Drugs(ATC4)",doc.bionlp_atc4_t));
+        }
+
+        if ("scispcay_diseases_t" in doc){
+          $("#suggestions").append('<p>Diseases:'+doc.scispcay_diseases_t+'</p>');
+        }
+        var words = data.response.docs[0].text_t.split(" ");
+        var word_cloud_html = "";
+        for (var i=0;i<words.length;i++){
+          word_cloud_html=word_cloud_html+"<div id=\"word_"+i+"\" class=\"btn btn-word\">"+words[i]+"</div>";
+        }
+        $("#word_cloud").html(word_cloud_html);
+
+
+      });
+
+
+    </script>
+  </body>
+<footer>
+  <div class="oegfoot">
+  <p class="oeg">Developed by the <a href="http://www.oeg-upm.net/"> Ontology Engineering Group</a> (Universidad Politécnica de Madrid).</p>
+  </div>
+</footer>
+</html>
